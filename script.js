@@ -30,7 +30,16 @@ $$('[data-close]').forEach(a=>a.addEventListener('click',()=>{
   setMenuState(false);
   if(target){target.tabIndex=-1;target.focus({preventScroll:true})}
 }));
-document.addEventListener('keydown',e=>{if(e.key==='Escape'&&menu.classList.contains('open')){setMenuState(false);open.focus()}});
+document.addEventListener('keydown',e=>{
+  if(!menu.classList.contains('open')) return;
+  if(e.key==='Escape'){setMenuState(false);open.focus();return}
+  if(e.key!=='Tab') return;
+  const focusable=menu.querySelectorAll('a[href],button:not([disabled])');
+  if(!focusable.length) return;
+  const first=focusable[0],last=focusable[focusable.length-1];
+  if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus()}
+  else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}
+});
 
 $$('.service-head').forEach(btn=>btn.addEventListener('click',()=>{
   const isExpanded=btn.closest('.service-item').classList.toggle('active');
