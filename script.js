@@ -51,7 +51,7 @@ const preview=$('#previewImage');
 $$('.work-row').forEach(row=>{
   const show=()=>{
     const src=row.dataset.image;
-    if(!src) return;
+    if(!src){preview.classList.remove('show');return}
     preview.onload=()=>preview.classList.add('show');
     preview.onerror=()=>preview.classList.remove('show');
     preview.src=src;
